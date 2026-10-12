@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Municipal Complaint Management System</title>
+  <meta name="description" content="Municipal Complaint Management System for reporting and tracking civic issues in the community.">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- Top Navigation Header -->
+  <header class="navbar">
+    <a href="#" class="nav-brand">
+      <div class="brand-icon-wrap">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          <path d="m9 12 2 2 4-4"/>
+        </svg>
+      </div>
+      <div>
+        <div class="brand-title">
+          Municipal Portal
+          <span class="brand-badge">City Services</span>
+        </div>
+        <p class="brand-subtitle">Municipal Complaint Management System</p>
+      </div>
+    </a>
+
+    <div class="nav-controls">
+      <div id="backendStatus" class="status-pill status-checking">
+        <span class="status-dot"></span>
+        <span id="backendStatusText">Checking service status…</span>
+      </div>
+
+      <nav class="tab-group" aria-label="Main Navigation">
+        <button class="tab-btn active" data-tab="officerTab" id="tabBtnOfficer">
+          Home
+        </button>
+        <button class="tab-btn" data-tab="citizenTab" id="tabBtnCitizen">
+          Submit Complaint
+        </button>
+        <button class="tab-btn" data-tab="analyticsTab" id="tabBtnAnalytics">
+          Track Complaint
+        </button>
+        <button class="tab-btn" data-tab="simulatorTab" id="tabBtnSimulator">
+          My Complaints
+        </button>
+      </nav>
+
+      <a href="#contact" class="nav-link">Contact</a>
+      <button class="btn btn-secondary btn-small">Login</button>
+    </div>
+  </header>
+
+  <main class="main-content">
+    <div id="toastContainer" class="toast-container"></div>
+
+    <section id="officerTab" class="tab-view active">
+      <section class="hero-panel">
+        <div class="hero-copy">
+          <span class="eyebrow">Citizen services</span>
+          <h1>Municipal Complaint Management System</h1>
+          <p>Report civic issues, track service requests, and monitor their resolution through a simple and transparent municipal portal.</p>
+          <div class="hero-actions">
+            <button class="btn btn-primary" onclick="switchTab('citizenTab')">Submit a Complaint</button>
+            <button class="btn btn-secondary" onclick="switchTab('analyticsTab')">Track Complaint</button>
+          </div>
+        </div>
+        <div class="hero-meta">
+          <div class="hero-stat">
+            <strong>6</strong>
+            <span>Core complaint categories</span>
+          </div>
+          <div class="hero-stat">
+            <strong>4-step</strong>
+            <span>service workflow</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="service-overview">
+        <div class="overview-header">
+          <h2>Common service requests</h2>
+        </div>
+        <div class="category-grid">
+          <div class="category-item">Roads and potholes</div>
+          <div class="category-item">Water supply</div>
+          <div class="category-item">Streetlights</div>
+          <div class="category-item">Waste management</div>
+          <div class="category-item">Drainage and sanitation</div>
+          <div class="category-item">Public property</div>
+        </div>
+      </section>
+
+      <section class="process-panel">
+        <div class="overview-header">
+          <h2>How it works</h2>
+        </div>
+        <div class="process-steps">
+          <div class="step-item"><span>1</span><p>Submit</p></div>
+          <div class="step-item"><span>2</span><p>Review</p></div>
+          <div class="step-item"><span>3</span><p>In Progress</p></div>
+          <div class="step-item"><span>4</span><p>Resolved</p></div>
+        </div>
+      </section>
+
+      <section id="contact" class="help-panel">
+        <div>
+          <h2>Need help?</h2>
+          <p>For urgent civic safety issues, contact the municipal help desk immediately. For general queries, use the support channels below.</p>
+        </div>
+        <div class="help-links">
+          <a href="tel:+18005550199">Call 1800 555 0199</a>
+          <a href="mailto:civicservices@municipal.gov">civicservices@municipal.gov</a>
+        </div>
+      </section>
+      <!-- Executive KPI Metrics -->
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-card-top">
+            <span class="kpi-label">Active Incidents</span>
+            <div class="kpi-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/>
+              </svg>
+            </div>
+          </div>
+          <div class="kpi-val" id="kpiActive">0</div>
+          <div class="kpi-sub">
+            <span class="pulse-live"></span> Dynamically prioritized in queue
+          </div>
+        </div>
+
+        <div class="kpi-card hazard-highlight">
+          <div class="kpi-card-top">
+            <span class="kpi-label">Life-Safety Hazards</span>
+            <div class="kpi-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+              </svg>
+            </div>
+          </div>
+          <div class="kpi-val" id="kpiHazards">0</div>
+          <div class="kpi-sub">+50.0 Instant Overriding Boost Applied</div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-card-top">
+            <span class="kpi-label">Weighted P-Score</span>
+            <div class="kpi-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+              </svg>
+            </div>
+          </div>
+          <div class="kpi-val" id="kpiAvgScore">0.0</div>
+          <div class="kpi-sub">Algorithm mean across open backlog</div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-card-top">
+            <span class="kpi-label">SLA Resolution Rate</span>
+            <div class="kpi-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>
+              </svg>
+            </div>
+          </div>
+          <div class="kpi-val" id="kpiResolutionRate">0%</div>
+          <div class="kpi-sub">Across 3 monitored municipal divisions</div>
+        </div>
+      </div>
+
+      <!-- Filter, Search & Command Toolbar -->
+      <div class="card toolbar-card">
+        <div class="toolbar-header">
+          <div>
+            <h2>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+              </svg>
+              Dynamic Priority Dispatch Queue
+            </h2>
+            <p class="section-desc">Real-time ranked by multi-variable formula: <code>P = (Severity × 0.5) + (Impact × 0.3) + (Age × 0.2) + HazardBoost</code></p>
+          </div>
+          <div style="display:flex; gap:0.65rem;">
+            <button class="btn btn-secondary" onclick="fetchPriorityQueue()" id="refreshQueueBtn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/>
+              </svg>
+              Refresh
+            </button>
+            <button class="btn btn-primary" onclick="switchTab('citizenTab')" id="newTicketBtn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+              </svg>
+              New Incident
+            </button>
+          </div>
+        </div>
+
+        <!-- Filter Controls -->
+        <div class="toolbar-filters">
+          <div class="search-box">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            </svg>
+            <input type="text" id="queueSearchInput" placeholder="Search by issue title, location, or officer..." oninput="handleFilterChange()">
+          </div>
+
+          <select id="filterDeptSelect" class="filter-select" onchange="handleFilterChange()">
+            <option value="">All Departments</option>
+          </select>
+
+          <select id="filterZoneSelect" class="filter-select" onchange="handleFilterChange()">
+            <option value="">All Zones</option>
+            <option value="ZONE-NORTH">ZONE-NORTH</option>
+            <option value="ZONE-SOUTH">ZONE-SOUTH</option>
+            <option value="ZONE-CENTRAL">ZONE-CENTRAL</option>
+          </select>
+
+          <select id="filterStatusSelect" class="filter-select" onchange="handleFilterChange()">
+            <option value="">All Stages</option>
+            <option value="REPORTED">REPORTED</option>
+            <option value="VERIFIED">VERIFIED</option>
+            <option value="ASSIGNED">ASSIGNED</option>
+            <option value="IN_PROGRESS">IN_PROGRESS</option>
+            <option value="RESOLVED">RESOLVED</option>
+          </select>
+
+          <button id="filterHazardToggle" class="hazard-filter-btn" onclick="toggleHazardFilter()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"/>
+            </svg>
+            Hazards Only
+          </button>
+        </div>
+      </div>
+
+      <!-- Priority Table Card -->
+      <div class="card table-card">
+        <div class="table-container">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th style="width: 50px;">Rank</th>
+                <th style="width: 140px;">Priority Score</th>
+                <th>Civic Incident</th>
+                <th>Jurisdiction & GPS</th>
+                <th>Impact & Age</th>
+                <th>Field Officer</th>
+                <th>Stage Pipeline</th>
+                <th style="text-align: right; width: 180px;">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="priorityTableBody">
+              <tr>
+                <td colspan="8" class="empty-state">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+                  </svg>
+                  <h4>Loading Priority Queue...</h4>
+                  <p>Synchronizing real-time ticket state with backend scoring engine.</p>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         TAB 2: CITIZEN REPORTING & TRACKING PORTAL
+         ====================================================================== -->
+    <section id="citizenTab" class="tab-view">
+      <div class="grid-split">
+        <!-- Complaint Form -->
+        <div class="card form-card">
+          <h2>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+            </svg>
+            File a Verified Civic Complaint
+          </h2>
+          <p class="section-desc">Report hazardous public defects with GPS coordinates, multi-level severity, and photo proof.</p>
+
+          <form id="complaintForm" onsubmit="handleComplaintSubmit(event)">
+            <div class="form-group">
+              <label for="title">Incident Title *</label>
+              <input type="text" id="title" required placeholder="e.g. Major Water Pipeline Rupture on 5th Cross Road">
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="deptSelect">Target Department *</label>
+                <select id="deptSelect" required>
+                  <option value="1">Roads & Infrastructure</option>
+                  <option value="2" selected>Water Supply & Sewerage</option>
+                  <option value="3">Electrical & Street Lighting</option>
+                  <option value="4">Sanitation & Waste Management</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="zoneSelect">Municipal Zone *</label>
+                <select id="zoneSelect" required>
+                  <option value="ZONE-NORTH">ZONE-NORTH (Hebbal / Yelahanka)</option>
+                  <option value="ZONE-SOUTH" selected>ZONE-SOUTH (Jayanagar / Koramangala)</option>
+                  <option value="ZONE-CENTRAL">ZONE-CENTRAL (MG Road / Shivajinagar)</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="latitude">Latitude *</label>
+                <input type="number" step="0.0001" id="latitude" value="12.9716" required>
+              </div>
+              <div class="form-group">
+                <label for="longitude">Longitude *</label>
+                <input type="number" step="0.0001" id="longitude" value="77.5946" required>
+              </div>
+              <button type="button" class="btn btn-secondary" style="height:42px; margin-top:24px;" onclick="fillCurrentLocation()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 2a8 8 0 0 0-8 8c0 5.25 8 12 8 12s8-6.75 8-12a8 8 0 0 0-8-8z"/><circle cx="12" cy="10" r="3"/>
+                </svg>
+                Locate Me
+              </button>
+            </div>
+
+            <div class="form-group">
+              <label for="photoUrl">Photo Proof URL (Optional)</label>
+              <input type="url" id="photoUrl" placeholder="https://images.unsplash.com/..." value="https://images.unsplash.com/photo-1541888946425-d0fbb1861593" oninput="updatePhotoPreview()">
+              <div id="formPhotoPreview" class="photo-preview-wrap">
+                <img id="previewImg" src="https://images.unsplash.com/photo-1541888946425-d0fbb1861593" alt="Evidence Preview">
+              </div>
+            </div>
+
+            <!-- Severity 5-Level Pill Picker -->
+            <div class="form-group">
+              <label>
+                Base Severity Rating (W1 = 0.5) *
+                <span id="severityValBadge" class="brand-badge">Level 4: Urgent Hazard</span>
+              </label>
+              <input type="hidden" id="severitySlider" value="4">
+              <div class="severity-picker" id="severityPicker">
+                <div class="severity-pill" data-level="1" onclick="selectSeverity(1)">
+                  <span class="severity-pill-num">1</span>
+                  <span class="severity-pill-title">Minor</span>
+                </div>
+                <div class="severity-pill" data-level="2" onclick="selectSeverity(2)">
+                  <span class="severity-pill-num">2</span>
+                  <span class="severity-pill-title">Moderate</span>
+                </div>
+                <div class="severity-pill" data-level="3" onclick="selectSeverity(3)">
+                  <span class="severity-pill-num">3</span>
+                  <span class="severity-pill-title">Severe</span>
+                </div>
+                <div class="severity-pill selected" data-level="4" onclick="selectSeverity(4)">
+                  <span class="severity-pill-num">4</span>
+                  <span class="severity-pill-title">Urgent</span>
+                </div>
+                <div class="severity-pill" data-level="5" onclick="selectSeverity(5)">
+                  <span class="severity-pill-num">5</span>
+                  <span class="severity-pill-title">Critical</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="affectedCount">Initial Impacted Citizens / Households (W2 = 0.3) *</label>
+              <input type="number" id="affectedCount" min="1" max="1000" value="15" oninput="updateLiveScorePreview()">
+            </div>
+
+            <!-- Critical Hazard Toggle -->
+            <div class="hazard-toggle-card">
+              <label class="toggle-switch">
+                <input type="checkbox" id="hazardToggle" onchange="updateLiveScorePreview()" checked>
+                <span class="toggle-slider"></span>
+              </label>
+              <div class="hazard-toggle-text">
+                <strong>Critical Life-Safety Hazard (+50 Priority Override)</strong>
+                <p>Toggle if imminent danger exists (water contamination, gas leak, high voltage wire, collapsed pavement).</p>
+              </div>
+            </div>
+
+            <!-- Live Score Calculation Box -->
+            <div class="score-preview-box">
+              <div class="score-preview-header">
+                <span>Calculated Baseline Priority Score</span>
+                <span style="color:#60a5fa;">Dynamic Algorithm</span>
+              </div>
+              <div class="score-preview-value" id="previewScoreBadge">56.5</div>
+              <div class="score-preview-breakdown" id="previewFormulaText">
+                (4 × 0.5) + (15 × 0.3) + (0h × 0.2) + 50.0 boost = 56.5
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-block" id="submitComplaintBtn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
+              </svg>
+              Submit Ticket to Dispatch Queue
+            </button>
+          </form>
+        </div>
+
+        <!-- Community Feed & Upvoting -->
+        <div class="card community-card">
+          <h2>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+            </svg>
+            Community Incidents & Upvoting
+          </h2>
+          <p class="section-desc">Upvoting civic reports increases citizen impact and dynamically boosts algorithm queue position.</p>
+
+          <div id="communityFeed" class="community-feed-list">
+            <!-- Dynamic Feed Cards rendered via JS -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         TAB 3: ZONE ANALYTICS & SLAS
+         ====================================================================== -->
+    <section id="analyticsTab" class="tab-view">
+      <div class="card">
+        <h2>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>
+          </svg>
+          Municipal Division Turnaround & Analytics
+        </h2>
+        <p class="section-desc">Performance benchmarking, SLA resolution metrics, and zone division analytics according to Section 10 API.</p>
+
+        <!-- Executive Analytics Top Row -->
+        <div class="analytics-summary-row" id="analyticsSummaryRow">
+          <div class="analytics-stat-box">
+            <div class="stat-label">Total Logged Incidents</div>
+            <div class="stat-val" id="anaTotal">0</div>
+          </div>
+          <div class="analytics-stat-box">
+            <div class="stat-label">Pending In Queue</div>
+            <div class="stat-val" id="anaPending" style="color:#fbbf24;">0</div>
+          </div>
+          <div class="analytics-stat-box">
+            <div class="stat-label">Successfully Resolved</div>
+            <div class="stat-val" id="anaResolved" style="color:#34d399;">0</div>
+          </div>
+          <div class="analytics-stat-box">
+            <div class="stat-label">Overall Resolution Rate</div>
+            <div class="stat-val" id="anaRate" style="color:#38bdf8;">0%</div>
+          </div>
+        </div>
+
+        <div id="zoneAnalyticsGrid" class="zone-grid">
+          <!-- Populated dynamically via JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         TAB 4: PRIORITY ALGORITHM SIMULATOR
+         ====================================================================== -->
+    <section id="simulatorTab" class="tab-view">
+      <div class="card">
+        <h2>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/>
+          </svg>
+          Priority Scoring Engine Workbench
+        </h2>
+        <p class="section-desc">Interactive laboratory for simulating Section 6 Multi-Factor Prioritization: <code>Priority (P) = (Severity × W1) + (Affected × W2) + (Age × W3) + HazardBoost</code>.</p>
+
+        <!-- Scenario Presets -->
+        <div class="scenario-presets">
+          <span style="font-size:0.78rem; font-weight:700; color:var(--text-muted); align-self:center;">Presets:</span>
+          <button class="preset-chip active" onclick="loadSimPreset(1)">Burst Main Pipeline (Flood Risk)</button>
+          <button class="preset-chip" onclick="loadSimPreset(2)">Fallen 11kV Power Cable</button>
+          <button class="preset-chip" onclick="loadSimPreset(3)">Dangerous School Pothole</button>
+          <button class="preset-chip" onclick="loadSimPreset(4)">Aging Neglected Streetlight (3 Days)</button>
+        </div>
+
+        <div class="simulator-layout">
+          <!-- Controls -->
+          <div class="simulator-controls">
+            <div class="form-group">
+              <label>
+                Base Severity (W1 = 0.5)
+                <strong id="simSevVal" style="color:#60a5fa; font-family:var(--font-mono);">3</strong>
+              </label>
+              <div class="range-slider-wrap">
+                <input type="range" id="simSev" min="1" max="5" value="3" oninput="runSimulation()">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>
+                Affected Citizens / Upvotes (W2 = 0.3)
+                <strong id="simAffVal" style="color:#60a5fa; font-family:var(--font-mono);">20</strong>
+              </label>
+              <div class="range-slider-wrap">
+                <input type="range" id="simAff" min="1" max="100" value="20" oninput="runSimulation()">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>
+                Ticket Aging in Hours (W3 = 0.2)
+                <strong id="simAgeVal" style="color:#60a5fa; font-family:var(--font-mono);">24 hrs</strong>
+              </label>
+              <div class="range-slider-wrap">
+                <input type="range" id="simAge" min="0" max="168" value="24" oninput="runSimulation()">
+              </div>
+            </div>
+
+            <div class="hazard-toggle-card">
+              <label class="toggle-switch">
+                <input type="checkbox" id="simHazard" onchange="runSimulation()">
+                <span class="toggle-slider"></span>
+              </label>
+              <div class="hazard-toggle-text">
+                <strong>Critical Life-Safety Hazard (+50.0 Overriding Boost)</strong>
+                <p>Simulate instant emergency placement for life-threatening risks.</p>
+              </div>
+            </div>
+
+            <div class="algo-explanation">
+              <h4>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px; height:16px;">
+                  <circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/>
+                </svg>
+                Mathematical Formulation & Architectural Guarantees:
+              </h4>
+              <ul>
+                <li><strong>Severity Component (W1 = 0.5):</strong> Establishes foundational risk baseline from field inspections.</li>
+                <li><strong>Citizen Impact (W2 = 0.3):</strong> Crowdsources neighborhood impact dynamically through verified citizen upvotes.</li>
+                <li><strong>SLA Aging Multiplier (W3 = 0.2):</strong> Prevents ticket starvation by incrementing priority every 5 minutes in background quartz/cron.</li>
+                <li><strong>Hazard Override (+50.0 Boost):</strong> Guarantees zero SLA breach for critical infrastructure failures.</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Live Result Card -->
+          <div class="simulator-result">
+            <div class="sim-score-card">
+              <div class="sim-label">Computed Dynamic Priority Score (P)</div>
+              <div class="sim-score" id="simResultScore">12.30</div>
+              
+              <!-- Contribution Share Bars -->
+              <div class="sim-contribution-bars">
+                <div class="contribution-item">
+                  <span class="contribution-name">Severity (0.5)</span>
+                  <div class="contribution-bar-track">
+                    <div id="simBarSev" class="contribution-bar-fill" style="width:25%; background:#3b82f6;"></div>
+                  </div>
+                  <span class="contribution-val" id="simValSev">1.50</span>
+                </div>
+                <div class="contribution-item">
+                  <span class="contribution-name">Impact (0.3)</span>
+                  <div class="contribution-bar-track">
+                    <div id="simBarAff" class="contribution-bar-fill" style="width:40%; background:#10b981;"></div>
+                  </div>
+                  <span class="contribution-val" id="simValAff">6.00</span>
+                </div>
+                <div class="contribution-item">
+                  <span class="contribution-name">Aging (0.2)</span>
+                  <div class="contribution-bar-track">
+                    <div id="simBarAge" class="contribution-bar-fill" style="width:35%; background:#f59e0b;"></div>
+                  </div>
+                  <span class="contribution-val" id="simValAge">4.80</span>
+                </div>
+                <div class="contribution-item" id="simHazardRow" style="display:none;">
+                  <span class="contribution-name" style="color:#f87171;">Hazard Boost</span>
+                  <div class="contribution-bar-track">
+                    <div id="simBarHazard" class="contribution-bar-fill" style="width:100%; background:#ef4444;"></div>
+                  </div>
+                  <span class="contribution-val" id="simValHazard" style="color:#f87171;">+50.0</span>
+                </div>
+              </div>
+
+              <div class="score-preview-breakdown" id="simBreakdownText">
+                Severity: 1.50 | Impact: 6.00 | Age: 4.80 | Boost: 0.00
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ======================================================================
+       MODAL 1: Resolution Timeline & Audit Trail
+       ====================================================================== -->
+  <div id="timelineModal" class="modal-overlay hidden" onclick="handleModalBackdropClick(event, 'timelineModal')">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="modalTitle">Incident Audit Trail & Resolution Pipeline</h3>
+        <button class="close-btn" onclick="closeTimelineModal()" aria-label="Close dialog">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div id="modalTicketMeta" class="ticket-meta-box"></div>
+        <div class="pipeline-stepper" id="pipelineStepper"></div>
+        
+        <h4 style="font-size:0.88rem; font-weight:700; margin-bottom:0.65rem; color:#ffffff;">
+          Chronological Field Logs & Verification Events:
+        </h4>
+        <div class="timeline-logs" id="timelineLogs"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================================================================
+       MODAL 2: Update Resolution Stage & Proof of Work
+       ====================================================================== -->
+  <div id="statusModal" class="modal-overlay hidden" onclick="handleModalBackdropClick(event, 'statusModal')">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>Advance Resolution Stage</h3>
+        <button class="close-btn" onclick="closeStatusModal()" aria-label="Close dialog">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+      <form id="statusForm" onsubmit="handleStatusSubmit(event)">
+        <input type="hidden" id="statusComplaintId">
+        <div class="form-group">
+          <label for="nextStatus">Target Resolution Stage *</label>
+          <select id="nextStatus" required>
+            <option value="VERIFIED">VERIFIED (Field Inspector Confirmed Risk)</option>
+            <option value="ASSIGNED">ASSIGNED (Allocated to Field Crew)</option>
+            <option value="IN_PROGRESS" selected>IN_PROGRESS (Crew On-Site / Repair Active)</option>
+            <option value="RESOLVED">RESOLVED (Repairs Completed & Tested)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="statusRemarks">Officer Remarks / Work Summary *</label>
+          <textarea id="statusRemarks" rows="3" required placeholder="e.g. Ruptured pipeline section isolated and replaced with 600mm ductile iron pipe."></textarea>
+        </div>
+        <div class="form-group">
+          <label for="statusPhotoUrl">Completion Proof Photo URL (Optional)</label>
+          <input type="url" id="statusPhotoUrl" placeholder="https://images.unsplash.com/photo-...">
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">Confirm Stage Advance</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ======================================================================
+       MODAL 3: Assign Field Officer Modal
+       ====================================================================== -->
+  <div id="assignModal" class="modal-overlay hidden" onclick="handleModalBackdropClick(event, 'assignModal')">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>Assign Incident to Field Officer</h3>
+        <button class="close-btn" onclick="closeAssignModal()" aria-label="Close dialog">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+      <form id="assignForm" onsubmit="handleAssignSubmit(event)">
+        <input type="hidden" id="assignComplaintId">
+        <div id="assignTicketMeta" class="ticket-meta-box"></div>
+        <div class="form-group">
+          <label for="assignOfficerSelect">Select Field Officer *</label>
+          <select id="assignOfficerSelect" required>
+            <!-- Populated dynamically via JS -->
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="assignNotes">Dispatch Instructions / Notes</label>
+          <textarea id="assignNotes" rows="2" placeholder="e.g. High priority site inspection. Bring gas detector equipment."></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">Confirm Officer Allocation</button>
+      </form>
+    </div>
+  </div>
+
+  <script type="module" src="./app.js"></script>
+</body>
+</html>
